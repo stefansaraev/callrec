@@ -33,8 +33,9 @@ type rewindData struct {
 
 const rewindRoleApplication = 0x20
 const rewindServiceSimpleApplication = (rewindRoleApplication + 0)
+const rewindServiceOpenDmrTerminal = (rewindRoleApplication + 1)
 
-const rewindVersionDescription = "Call recorder"
+const rewindVersionDescription = "DMR Terminal"
 const rewindVersionDataLength = (len(rewindVersionDescription) + 5)
 
 type rewindVersionData struct {

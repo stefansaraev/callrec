@@ -21,7 +21,7 @@ func sendKeepalive(conn net.Conn) {
 
 	var rvd rewindVersionData
 	rvd.RemoteID = settings.AppID
-	rvd.RewindService = rewindServiceSimpleApplication
+	rvd.RewindService = rewindServiceOpenDmrTerminal
 	copy(rvd.Description[:], []byte(rewindVersionDescription))
 
 	var buf bytes.Buffer
