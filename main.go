@@ -10,6 +10,8 @@ import (
 	"log"
 	"net"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 )
 
@@ -91,6 +93,10 @@ func handlePacket(conn net.Conn, p *udpPacket) bool {
 }
 
 func main() {
+	sigs := make(chan os.Signal, 1)
+
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGPIPE)
+
 	configFileName := "config.json"
 
 	flag.StringVar(&configFileName, "c", configFileName, "config file to use, default: config.json")
@@ -120,6 +126,12 @@ func main() {
 
 	var timeLastSentKeepalive time.Time
 	var timeLastValidPacket time.Time
+
+	go func() {
+		<-sigs
+		sendClose(conn)
+		os.Exit(0)
+	}()
 
 	for {
 		timeDiff := time.Since(timeLastSentKeepalive)

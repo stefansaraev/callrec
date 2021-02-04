@@ -96,3 +96,18 @@ func sendSubscription(conn net.Conn, dstID uint32, sessionType uint32) {
 		log.Println("warning: can't send udp packet", err)
 	}
 }
+
+func sendClose(conn net.Conn) {
+	//log.Println("sending Close")
+
+	var rd rewindData
+	copy(rd.Sign[:], []byte(rewindProtocolSign))
+	rd.PacketType = rewindPacketTypeClose
+	rd.PayloadLength = 0
+	rd.SeqNum = txSeqNum
+	txSeqNum++
+
+	var buf bytes.Buffer
+	binary.Write(&buf, binary.LittleEndian, &rd)
+	conn.Write(buf.Bytes())
+}
